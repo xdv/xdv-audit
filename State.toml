@@ -1,0 +1,44 @@
+# XDV Audit & Attestation Workspace Manifest
+# XDV-034 Deterministic Audit and Attestation
+
+[workspace]
+name = "xdv_audit"
+version = "0.1.0"
+description = "XDV Deterministic Audit & Attestation - Cross-Domain Trace Logging and Verifiable Execution Integrity"
+
+[workspace.sectors]
+xdv_lib = "../xdv-lib"
+xdv_crypto = "../xdv-crypto"
+dustlib = "../dustlib"
+dustlib_k = "../dustlib-k"
+
+[workspace.entrypoints]
+xdv_audit = "src/audit_bridge.ds"
+xdv_trace = "src/trace/global_trace.ds"
+xdv_log = "src/trace/tamper_evident_log.ds"
+xdv_attestation = "src/attestation/hw_attestation.ds"
+xdv_replay = "src/replay/replay_verified.ds"
+
+[workspace.specs]
+XDV_034 = "../xdv-spec/XDV-034-Deterministic-Audit-and-Attestation.md"
+
+[target.x64-pc-none]
+linker = "ld"
+linker_flags = ["-nostdlib", "-static"]
+
+[audit.trace]
+deterministic_ordering = true
+logical_timestamp = true
+hash_chaining = true
+cross_domain_coverage = true
+
+[audit.attestation]
+hardware_required = true
+pq_signatures = true
+firmware_verification = true
+provider_binding = true
+
+[audit.replay]
+orchestration_replay = true
+state_reconstruction = false
+deterministic_verification = true

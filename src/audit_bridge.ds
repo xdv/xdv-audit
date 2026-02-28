@@ -1,0 +1,49 @@
+// File: audit_bridge.ds - This file is part of XDV
+// Copyright (c) 2026 Dust LLC, and Contributors
+// Description:
+//   XDV Audit & Attestation Bridge
+//   Main entry point for xdv-audit providing deterministic trace logging,
+//   tamper-evident logs, hardware attestation, and replay verification
+//   per XDV-034 specification.
+
+module xdv_audit;
+
+import xdv_lib;
+
+pub struct AuditConfig {
+    deterministic_ordering: bool,
+    logical_timestamp: bool,
+    hash_chaining: bool,
+    cross_domain_coverage: bool,
+    hardware_required: bool,
+    pq_signatures: bool,
+}
+
+pub struct AuditProvider {
+    config: AuditConfig,
+    trace: GlobalTrace,
+    log: TamperEvidentLog,
+    attestation: HWAttestation,
+    replay: ReplayVerified,
+}
+
+pub fn init(config: AuditConfig) -> AuditProvider {
+    AuditProvider {
+        config: config,
+        trace: GlobalTrace::new(),
+        log: TamperEvidentLog::new(),
+        attestation: HWAttestation::new(),
+        replay: ReplayVerified::new(),
+    }
+}
+
+pub fn audit_bridge() -> AuditProvider {
+    init(AuditConfig {
+        deterministic_ordering: true,
+        logical_timestamp: true,
+        hash_chaining: true,
+        cross_domain_coverage: true,
+        hardware_required: true,
+        pq_signatures: true,
+    })
+}
